@@ -8,6 +8,9 @@
 	</head>
 	<body>
 
-		{% if user %}<div>{{user}}</div>{% endif %}
+		{% if user %}<ul>{% for user_data in user %}
+
+			<li>{{user_data}}</li>
+			{% endfor %}</ul>{% endif %}
 	</body>
 </html>

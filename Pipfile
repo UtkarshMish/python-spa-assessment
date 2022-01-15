@@ -7,7 +7,6 @@ name = "pypi"
 flask = {extras = ["async"], version = "*"}
 tortoise-orm = {extras = ["aiomysql"], version = "*"}
 mysqlclient = "*"
-pony = "*"
 
 [dev-packages]
 black = "*"
