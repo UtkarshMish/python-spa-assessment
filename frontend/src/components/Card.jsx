@@ -44,7 +44,12 @@ export default function Card() {
 				))}
 			</Box>
 			<Box display={"flex"} alignSelf={"flex-start"} width={"100%"}>
-				<FormBox type={current} isSuccess={isSuccess} setSuccess={setIsSuccess} />
+				<FormBox
+					type={current}
+					isSuccess={isSuccess}
+					setSuccess={setIsSuccess}
+					setCurrent={setCurrent}
+				/>
 			</Box>
 		</Box>
 	);

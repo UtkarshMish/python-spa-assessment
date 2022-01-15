@@ -10,12 +10,16 @@ import React from "react";
 import { MdMailOutline } from "react-icons/md";
 import { RiLock2Fill, RiUser3Fill } from "react-icons/ri";
 import { createUser, loginUser } from "../utils/apiFunctions";
-export default function FormBox({ type = "login", isSuccess, setSuccess }) {
+export default function FormBox({
+	type = "login",
+	isSuccess,
+	setSuccess,
+	setCurrent
+}) {
 	const iconSize = 20;
 	const inputHeight = 12;
 	const inputMargin = 5;
 	const inputBackground = "linkedin.500";
-
 	async function submitData(e) {
 		e.preventDefault();
 		const username = e.target.username?.value || "";
@@ -25,8 +29,11 @@ export default function FormBox({ type = "login", isSuccess, setSuccess }) {
 			? loginUser({ username, password })
 			: createUser({ username, password, email }));
 		if (setSuccess && type === "register") {
+			setCurrent("login");
 			setSuccess(response);
-			setTimeout(() => setSuccess(null), 3500);
+			setTimeout(() => {
+				setSuccess(null);
+			}, 3500);
 		}
 	}
 	return (
@@ -69,7 +76,7 @@ export default function FormBox({ type = "login", isSuccess, setSuccess }) {
 			{isSuccess != null && (
 				<Box marginBlock={"4"}>
 					<Text
-						textColor={isSuccess ? "green.50" : "red.500"}
+						textColor={isSuccess ? "green.700" : "red.500"}
 						fontSize={"sm"}
 						fontWeight={"semibold"}
 						fontFamily={"sans-serif"}>
