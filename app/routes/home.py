@@ -7,8 +7,7 @@ from flask import Blueprint, render_template
 home_route = Blueprint("home_api", __name__)
 
 
-@home_route.get("/")
-@execute_db
-async def home_page():
-    user_list = [asdict(user) for user in await User.all()]
-    return render_template("index.html", user=user_list)
+@home_route.route("/")
+@home_route.route("/<path:path>")
+def home_page(path=None):
+    return render_template("index.html")

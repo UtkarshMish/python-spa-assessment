@@ -1,5 +1,6 @@
 import { Box, Heading } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { toCapitalise } from "../utils/helperMethod";
 import FormBox from "./FormBox";
 
 export default function Card() {
@@ -25,7 +26,7 @@ export default function Card() {
 				width={"100%"}
 				textColor={"gray.700"}
 				paddingBlock={"3"}>
-				Register
+				{toCapitalise(current)}
 			</Heading>
 			<Box display={"flex"} alignSelf={"flex-start"}>
 				{pageHeadings.map((head, id) => (

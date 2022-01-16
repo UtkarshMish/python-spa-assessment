@@ -25,9 +25,9 @@ def handle_integrity_error(err: IntegrityError):
 @api_router.post("/auth")
 @execute_db
 async def check_user():
-    if session["user"]:
+    if session.get("user"):
         return AUTH_SUCCESS, 200
-    elif len(request.json) == 2:
+    elif len(request.json) == 3:
         password: str = request.json["password"]
         user = await User.get_or_none(
             user_name=request.json["user_name"],
@@ -39,8 +39,8 @@ async def check_user():
             ).hex(),
         )
         if user:
-            session["user"] = request.json["user"]
-            return {**SUCCESS, **AUTH_FAILURE}, 200
+            session["user"] = request.json["user_name"]
+            return {**SUCCESS, **AUTH_SUCCESS}, 200
         else:
             return {**FAILED, **AUTH_FAILURE}, 400
     else:
