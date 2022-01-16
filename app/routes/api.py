@@ -2,9 +2,10 @@ import hashlib
 from os import environ
 from typing import Tuple
 
+from app.configs.constants import AUTH_FAILURE, AUTH_SUCCESS, FAILED, SUCCESS
 from app.models import execute_db
 from app.models.User import User
-from flask import Blueprint, request
+from flask import Blueprint, request, session
 from tortoise.exceptions import IntegrityError
 
 api_router = Blueprint("api", __name__, url_prefix="/api")
@@ -24,9 +25,11 @@ def handle_integrity_error(err: IntegrityError):
 @api_router.post("/auth")
 @execute_db
 async def check_user():
-    if len(request.json) == 2:
+    if session["user"]:
+        return AUTH_SUCCESS, 200
+    elif len(request.json) == 2:
         password: str = request.json["password"]
-        user = await User.filter(
+        user = await User.get_or_none(
             user_name=request.json["user_name"],
             password=hashlib.pbkdf2_hmac(
                 hash_name="sha384",
@@ -35,15 +38,19 @@ async def check_user():
                 iterations=350,
             ).hex(),
         )
-        return ({"success": True}, 200) if len(user) > 0 else ({"success": False}, 400)
+        if user:
+            session["user"] = request.json["user"]
+            return {**SUCCESS, **AUTH_FAILURE}, 200
+        else:
+            return {**FAILED, **AUTH_FAILURE}, 400
     else:
-        return {"success": False}, 400
+        return AUTH_FAILURE, 400
 
 
 @api_router.post("/user")
 @execute_db
 async def create_user():
-    if len(request.json) == 3:
+    if len(request.json) == 4:
         password: str = request.json["password"]
         await User.create(
             user_name=request.json["user_name"],
@@ -55,9 +62,9 @@ async def create_user():
                 iterations=350,
             ).hex(),
         )
-        return {"success": True}
+        return SUCCESS
     else:
-        return {"success": False}, 400
+        return FAILED, 400
 
 
 @api_router.delete("/user")
@@ -66,10 +73,6 @@ async def delete_user():
     if len(request.json) == 1 and "id" in request.json:
         user: User = await User.get_or_none(id=request.json["id"])
 
-        return (
-            {"success": True}
-            if user and await user.delete() is None
-            else {"success": False}
-        )
+        return SUCCESS if user and await user.delete() is None else FAILED
     else:
-        return {"success": False}, 400
+        return FAILED, 400

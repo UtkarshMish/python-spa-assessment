@@ -5,12 +5,16 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Home</title>
+		<meta name="_csrf_token" content="{{csrf_token()}}" />
 	</head>
 	<body>
-
-		{% if user %}<ul>{% for user_data in user %}
+		{% if user %}
+		<ul>
+			{% for user_data in user %}
 
 			<li>{{user_data}}</li>
-			{% endfor %}</ul>{% endif %}
+			{% endfor %}
+		</ul>
+		{% endif %}
 	</body>
 </html>
