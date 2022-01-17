@@ -34,7 +34,16 @@ export async function loginUser({
 			_csrf_token: csrf_token
 		});
 
-		return data.message || false;
+		return data.auth || false;
 	}
 	return false;
+}
+
+export async function checkUserInSession() {
+	const { data } = await axios.post("/api/auth");
+	if (data && data.auth) {
+		return data.auth;
+	} else {
+		return false;
+	}
 }

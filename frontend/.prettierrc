@@ -1,7 +1,8 @@
 {
   "arrowParens": "always",
   "trailingComma": "none",
-  "singleQuote": true,
+  "singleQuote": false,
   "semi": true,
-  "bracketSameLine": true
+  "bracketSameLine": true,
+  "parser": "babel"
 }

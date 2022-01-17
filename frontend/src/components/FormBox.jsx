@@ -20,15 +20,14 @@ export default function FormBox({
 		const response = await (type === "login"
 			? loginUser({ username, password, csrf_token })
 			: createUser({ username, password, email, csrf_token }));
-		if (setSuccess) {
-			setSuccess(response);
+		if (setSuccess && type === "register") {
 			setTimeout(() => {
 				setSuccess(null);
 			}, 3500);
-
-			if (response === true && type === "register") {
-				setCurrent("login");
-			}
+			setSuccess(response);
+			setCurrent("login");
+		} else if (type === "login") {
+			setSuccess(response);
 		}
 	}
 	return (

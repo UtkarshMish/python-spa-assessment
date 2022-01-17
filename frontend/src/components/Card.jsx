@@ -1,12 +1,17 @@
 import { Box, Heading } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toCapitalise } from "../utils/helperMethod";
 import FormBox from "./FormBox";
 
-export default function Card() {
+export default function Card({ setLoggedIn }) {
 	const pageHeadings = ["login", "register"];
 	const [current, setCurrent] = useState(pageHeadings[0]);
 	const [isSuccess, setIsSuccess] = useState(null);
+	useEffect(() => {
+		if (isSuccess === true && current === "login" && setLoggedIn) {
+			setLoggedIn(true);
+		}
+	}, [isSuccess, current, setLoggedIn]);
 	const handleFormChange = (option) => {
 		setCurrent(option);
 		setIsSuccess(null);
