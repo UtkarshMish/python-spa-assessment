@@ -23,9 +23,9 @@ export default function FormBox({
 		if (setSuccess && type === "register") {
 			setTimeout(() => {
 				setSuccess(null);
+				setCurrent("login");
 			}, 3500);
 			setSuccess(response);
-			setCurrent("login");
 		} else if (type === "login") {
 			setSuccess(response);
 		}
