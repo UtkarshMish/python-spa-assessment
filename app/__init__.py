@@ -33,5 +33,5 @@ def create_app() -> Flask:
         content_security_policy_nonce_in=["script-src"],
     )
     csrf = SeaSurf(app)
-    csrf.exempt_urls("/api/auth")
+    csrf.exempt_urls(("/api/auth", "/api/mobile-number", "/api/forgot-password"))
     return app

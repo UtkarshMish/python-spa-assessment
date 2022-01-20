@@ -1,9 +1,11 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import { MdMailOutline } from "react-icons/md";
 import { RiLock2Fill, RiUser3Fill } from "react-icons/ri";
 import { createUser, loginUser } from "../utils/apiFunctions";
+import EmailForm from "./EmailForm";
 import { InputItem } from "./InputItem";
+import ModalView from "./ModalView";
 import { ResultBox } from "./ResultBox";
 export default function FormBox({
 	type = "login",
@@ -11,6 +13,7 @@ export default function FormBox({
 	setSuccess,
 	setCurrent
 }) {
+	const { isOpen, onOpen, onClose } = useDisclosure();
 	async function submitData(e) {
 		e.preventDefault();
 		const username = e.target.username?.value || "";
@@ -37,12 +40,30 @@ export default function FormBox({
 				typeValue="hidden"
 				defaultValue={document.getElementById("_csrf_token")?.content}
 			/>
-			<InputItem nameValue="username" Icon={RiUser3Fill} />
-			<InputItem nameValue="password" typeValue="password" Icon={RiLock2Fill} />
-			{type === "register" && (
+			<InputItem nameValue="username" Icon={RiUser3Fill} pattern={"\\w{3,}"} />
+			<InputItem
+				nameValue="password"
+				typeValue="password"
+				Icon={RiLock2Fill}
+				pattern={"\\S{4,}"}
+			/>
+			{type === "register" ? (
 				<InputItem nameValue="email" typeValue="email" Icon={MdMailOutline} />
+			) : (
+				<>
+					<Button
+						marginBlock={2}
+						variant={"outline"}
+						colorScheme={"green"}
+						onClick={onOpen}>
+						Forgot Password ?
+					</Button>
+					<ModalView isOpen={isOpen} onClose={onClose} titleText="Forgot Password ?">
+						<EmailForm />
+					</ModalView>
+				</>
 			)}
-			{isSuccess != null && <ResultBox isSuccess={isSuccess} />}
+			{isSuccess != null && <ResultBox isSuccess={isSuccess} type={type} />}
 			<Box>
 				<Button
 					type="submit"

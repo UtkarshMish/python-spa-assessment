@@ -1,5 +1,7 @@
 import { Box, Text } from "@chakra-ui/react";
-export function ResultBox({ isSuccess }) {
+export function ResultBox({ isSuccess, type = "register" }) {
+	const failedMessage =
+		type === "login" ? "User name or Password invalid" : "Failed to Register User";
 	return (
 		<Box marginBlock={"4"}>
 			<Text
@@ -7,7 +9,7 @@ export function ResultBox({ isSuccess }) {
 				fontSize={"sm"}
 				fontWeight={"semibold"}
 				fontFamily={"sans-serif"}>
-				{isSuccess ? "You have Successfully Registered" : "Failed to Register User"}
+				{isSuccess ? "You have Successfully Registered" : failedMessage}
 			</Text>
 		</Box>
 	);

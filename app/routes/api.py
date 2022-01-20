@@ -1,6 +1,5 @@
 import hashlib
 from os import environ
-from typing import Tuple
 
 from app.configs.constants import AUTH_FAILURE, AUTH_SUCCESS, FAILED, SUCCESS
 from app.models import execute_db
@@ -74,5 +73,40 @@ async def delete_user():
         user: User = await User.get_or_none(id=request.json["id"])
 
         return SUCCESS if user and await user.delete() is None else FAILED
+    else:
+        return FAILED, 400
+
+
+@api_router.post("/mobile-number")
+@execute_db
+async def get_mobile():
+    if request.json and len(request.json) == 1 and "mobile" in request.json:
+        user: User = await User.get(user_name=session.get("user"))
+        user.mobile_number = request.json["mobile"]
+        return SUCCESS if user and await user.save() is None else FAILED
+    elif session.get("user"):
+        user: User = await User.get_or_none(user_name=session.get("user"))
+        return {"message": False if user.mobile_number is None else True}
+    else:
+        return FAILED, 400
+
+
+@api_router.post("/forgot-password")
+@execute_db
+async def get_user():
+    if request.json and len(request.json) == 2 or len(request.json) == 3:
+        user: User = await User.get(
+            email=request.json["email"], mobile_number=int(request.json["mobileNumber"])
+        )
+        if user and request.json.get("newPassword"):
+            password = request.json["newPassword"]
+            user.password = hashlib.pbkdf2_hmac(
+                hash_name="sha384",
+                password=password.encode(),
+                salt=bytes.fromhex(environ.get("SALT_VALUE")),
+                iterations=350,
+            ).hex()
+            return {"message": True if await user.save() is None else False}
+        return {"message": True if user else False}
     else:
         return FAILED, 400

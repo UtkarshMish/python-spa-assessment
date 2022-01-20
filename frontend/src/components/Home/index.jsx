@@ -1,5 +1,6 @@
 import { Box, Button, Heading, Link } from "@chakra-ui/react";
 import React from "react";
+import MobileForm from "../MobileForm";
 export default function Home() {
 	return (
 		<Box
@@ -11,7 +12,7 @@ export default function Home() {
 			flexDirection={"column"}>
 			<NavBar />
 			<Box background={"whiteAlpha.700"} flex={"auto"}>
-				Container
+				<MobileForm />
 			</Box>
 		</Box>
 	);

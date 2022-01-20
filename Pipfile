@@ -10,6 +10,7 @@ mysqlclient = "*"
 flask-talisman = "*"
 flask-seasurf = "*"
 flask-json = "*"
+pytest = "*"
 
 [dev-packages]
 black = "*"

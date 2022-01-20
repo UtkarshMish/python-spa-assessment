@@ -9,7 +9,10 @@ export function InputItem({
 	nameValue,
 	typeValue = "text",
 	fontColor = "white",
-	defaultValue = "",
+	pattern,
+	defaultValue,
+	value,
+	changeHandler,
 	Icon
 }) {
 	return (
@@ -26,6 +29,13 @@ export function InputItem({
 				type={typeValue}
 				name={nameValue}
 				height={inputHeight}
+				value={value}
+				pattern={pattern}
+				onChange={(e) => {
+					if (changeHandler) {
+						changeHandler(e.target.value);
+					}
+				}}
 			/>
 		</InputGroup>
 	);
